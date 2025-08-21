@@ -14,29 +14,7 @@
     <title></title>
     <script type="text/javascript" src="src/dff/commjs/globalLoadDataSource.js"></script>
     <script type="text/javascript">
-        var appMainVer = 'build_revision';
-        var checkBack=function(){
-             var _gap_time = new Date().getTime() - localStorage["_beforeUnload_time"]*1;
-             if(localStorage["_beforeUnload_time"]&&_gap_time > 2000){
-                    delCookie("wadapp.current.user");
-                    localStorage["_beforeUnload_time"]="";
-                    window.location.reload();
-             }
-        }
-        function delCookie(name){
-            var exp = new Date();
-            exp.setTime(exp.getTime() - 1000);
-            var cval=getCookie(name);
-            if(cval!=null)
-            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
-        }
-        function getCookie(name){
-            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-            if(arr=document.cookie.match(reg))
-            return unescape(arr[2]);
-            else
-            return null;
-        }
+        console.log(1)
     </script>
     <link rel="icon" type="image/png" href="/asset/drawable/app/title.png" />
     <!--<link href="/asset/plugs.css" rel="stylesheet" />
