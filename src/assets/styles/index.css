@@ -1,0 +1,36 @@
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+body,
+#app {
+  height: 100%;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+.no-padding {
+  padding: 0px !important;
+}
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+p {
+  margin: 0;
+}
+
+/* 设置全局颜色 */
+:root {
+  --navbar-color: #bb2f25;
+  --primary-color: #bb2f25;
+  /* --secondary-color: #2ecc71;
+  --text-color: #333;
+  --background-color: #f9f9f9; */
+}
