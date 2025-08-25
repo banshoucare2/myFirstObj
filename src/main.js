@@ -2,77 +2,151 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'  // 引入样式文件
+
 import router from './router'
 import store from './store'
 import {
-  Button, Image, Toast, Dialog, Overlay, Step, Steps, Loading, Form, Field,
-  Divider, Icon, Cell, CellGroup, Popup, Picker, List, PullRefresh,
-  Uploader, Empty, Checkbox, Tabs, Tab, Cascader, Switch, Grid, GridItem,
-  IndexBar, IndexAnchor, Search, NoticeBar, DatetimePicker, Col, Row, NavBar,
-  Slider, ContactCard, RadioGroup, Radio, CheckboxGroup, Calendar, Area, Sticky,
-  Collapse, CollapseItem, Sidebar, SidebarItem, TreeSelect, Lazyload, ImagePreview,
-  Popover, ActionSheet, Swipe, SwipeItem, Card, Panel, SubmitBar, Stepper, Skeleton, Tag
-} from 'vant'
-import 'vant/lib/index.css'
-// 按需导入vant-ui组件
-Vue.use(Button)
-Vue.use(Image)
-Vue.use(Toast)
+	Pagination, Dialog, Dropdown, DropdownMenu, DropdownItem,
+	Menu, Submenu, MenuItem, MenuItemGroup, Input, InputNumber,
+	Radio, RadioGroup, RadioButton, Checkbox, CheckboxGroup,
+	Select, Option, OptionGroup, Button, ButtonGroup,
+	Table, TableColumn, DatePicker, Popover, Progress,
+	Tooltip, Form, FormItem, Tabs, TabPane, Tag, Tree, Row,
+	Col, Upload, Badge, Collapse, CollapseItem, Cascader, CascaderPanel,
+	Container, Header, Aside, Main, Footer, Drawer, Divider,
+	Image, MessageBox, Message, Notification, Loading,
+	Avatar, Timeline, TimelineItem, Card, Alert,InfiniteScroll, Switch, Steps, Step, PageHeader,
+	Descriptions, DescriptionsItem, Empty, Link, Popconfirm, Breadcrumb, BreadcrumbItem, Backtop,
+	Statistic, Slider, Autocomplete
+} from 'element-ui'
+/** 常用组件 */
+Vue.use(Pagination)
 Vue.use(Dialog)
-Vue.use(Overlay)
-Vue.use(Step)
-Vue.use(Steps)
-Vue.use(Loading)
-Vue.use(Form)
-Vue.use(Field)
-Vue.use(Divider)
-Vue.use(Icon)
-Vue.use(Cell)
-Vue.use(CellGroup)
-Vue.use(Popup)
-Vue.use(Picker)
-Vue.use(List)
-Vue.use(PullRefresh)
-Vue.use(Uploader)
-Vue.use(Empty)
-Vue.use(Checkbox)
-Vue.use(Tab)
-Vue.use(Tabs)
-Vue.use(Cascader)
-Vue.use(Switch)
-Vue.use(Grid)
-Vue.use(GridItem)
-Vue.use(IndexBar)
-Vue.use(IndexAnchor)
-Vue.use(Search)
-Vue.use(NoticeBar)
-Vue.use(DatetimePicker)
-Vue.use(Col)
-Vue.use(Row)
-Vue.use(NavBar)
-Vue.use(Slider)
-Vue.use(ContactCard)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItem)
+Vue.use(MenuItemGroup)
+Vue.use(Input)
+Vue.use(InputNumber)
 Vue.use(Radio)
 Vue.use(RadioGroup)
+Vue.use(RadioButton)
+Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
-Vue.use(Calendar)
-Vue.use(Area)
-Vue.use(Sticky)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(OptionGroup)
+Vue.use(Button)
+Vue.use(ButtonGroup)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(DatePicker)
+Vue.use(Popover)
+Vue.use(Progress)
+Vue.use(Tooltip)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(Tag)
+Vue.use(Tree)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Upload)
+Vue.use(Badge)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
-Vue.use(Sidebar)
-Vue.use(SidebarItem)
-Vue.use(TreeSelect)
-Vue.use(Lazyload)
-Vue.use(ImagePreview)
-Vue.use(Popover)
-Vue.use(ActionSheet)
-Vue.use(Swipe)
-Vue.use(SwipeItem)
+Vue.use(Cascader)
+Vue.use(CascaderPanel)
+Vue.use(Container)
+Vue.use(Header)
+Vue.use(Aside)
+Vue.use(Main)
+Vue.use(Footer)
+Vue.use(Drawer)
+Vue.use(Divider)
+Vue.use(Image)
+Vue.use(Avatar)
+Vue.use(Timeline)
+Vue.use(TimelineItem)
 Vue.use(Card)
-Vue.use(Panel)
-Vue.use(Skeleton)
-Vue.use(Tag)
+Vue.use(Alert)
+Vue.use(InfiniteScroll)
+Vue.use(Switch)
+Vue.use(Steps)
+Vue.use(Step)
+Vue.use(PageHeader)
+Vue.use(Descriptions)
+Vue.use(DescriptionsItem)
+Vue.use(Empty)
+Vue.use(Link)
+Vue.use(Popconfirm)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Backtop)
+Vue.use(Statistic)
+Vue.use(Slider)
+Vue.use(Autocomplete)
+// 公共通用组件
+import ConfirmButton from './components/common/ConfirmButton.vue'
+import CustomTooltip from './components/common/CustomTooltip.vue'
+import DialogWrapper from './components/common/DialogWrapper.vue'
+import ExportButton from './components/common/ExportButton.vue'
+import FormWrapper from './components/common/FormWrapper.vue'
+import ImportButton from './components/common/ImportButton.vue'
+import MainPageWrapper from './components/common/MainPageWrapper.vue'
+import NavigationBar from './components/common/NavigationBar.vue'
+import OperateGroup from './components/common/OperateGroup.vue'
+import SearchQroup from './components/common/SearchQroup.vue'
+import SectionBar from './components/common/SectionBar.vue'
+import SubpageWrapper from './components/common/SubpageWrapper.vue'
+import TableView from './components/common/TableView.vue'
+import Uploader from './components/common/Uploader.vue'
+import LyDescriptions from './components/common/Descriptions.vue'
+// 全局注册自定义组件
+Vue.component(ConfirmButton.name, ConfirmButton)
+Vue.component(CustomTooltip.name, CustomTooltip)
+Vue.component(DialogWrapper.name, DialogWrapper)
+Vue.component(ExportButton.name, ExportButton)
+Vue.component(FormWrapper.name, FormWrapper)
+Vue.component(ImportButton.name, ImportButton)
+Vue.component(MainPageWrapper.name, MainPageWrapper)
+Vue.component(NavigationBar.name, NavigationBar)
+Vue.component(OperateGroup.name, OperateGroup)
+Vue.component(SearchQroup.name, SearchQroup)
+Vue.component(SectionBar.name, SectionBar)
+Vue.component(SubpageWrapper.name, SubpageWrapper)
+Vue.component(TableView.name, TableView)
+Vue.component(Uploader.name, Uploader)
+Vue.component(LyDescriptions.name, LyDescriptions)
+
+Vue.prototype.$notify = Notification
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$message = Message
+Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$prompt  = MessageBox.prompt
+Vue.prototype.$startLoad = (querySelector, loadingText) => {
+	if (window.loadInstance) return
+	let option = {
+		target: querySelector || '.loadZone',
+		text: loadingText ||'读取中...',
+		customClass: 'font-30',
+		background: 'rgba(255,255,255,.7)'
+	}
+	window.loadInstance = Loading.service(option)
+}
+Vue.prototype.$endLoad = () => {
+	if (!window.loadInstance) return
+	window.loadInstance.close()
+	window.loadInstance = false
+}
+Vue.use(Loading)
 Vue.config.productionTip = false
 // 客户端机型
 const userAgent = navigator.userAgent

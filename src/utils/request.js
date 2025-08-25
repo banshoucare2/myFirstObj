@@ -1,10 +1,10 @@
 
 import axios from 'axios'
-import { Toast } from 'vant'
 import { BASE_CONFIG } from '@/constants/config'
 import store from '@/store'
 import cookies from "js-cookie";
 import router from '../router'
+import { Message } from 'element-ui'
 // import { generateAuthRedirectUri } from '@/utils/wechat'
 
 let service
@@ -70,7 +70,6 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
-    store.dispatch('loading/close')
     const result = response.data
     // console.log('result: ', result, response)
 
@@ -83,19 +82,20 @@ service.interceptors.response.use(
       // console.log('[接口请求-返回数据]: ', result)
       return result
     } else {
-      Toast(result.message)
+      Message.error(result.message)
+      window.loadInstance.close()
+	    window.loadInstance = false
       // console.log('[接口报错-错误信息]: ', result)
     }
     // console.log('[接口报错-错误信息]: ', result)
   },
   (error) => {
-    store.dispatch('loading/close')
     console.log(error)
     if (`${error}`.indexOf('401') > -1) {
-      Toast(`请先登录`)
-      router.push({path: '/dingding/login'})
+      Message.error(`请先登录`)
+      router.push({path: '/login'})
     } else {
-      Toast(`${error}`)
+      Message.error(`${error}`)
     }
     console.log(`Error: ${error}`, error, typeof error)
   }

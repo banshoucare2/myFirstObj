@@ -1,10 +1,10 @@
 <template>
-  <div id="app">
+  <div id="app" style="height: 100%;overflow: hidden;">
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive" />
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive" />
-    <Loading />
+    <!-- <Loading /> -->
   </div>
 </template>
 

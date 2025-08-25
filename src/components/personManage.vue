@@ -1,47 +1,49 @@
 <template>
-   <div class="page-container" style="  padding-top: 10px;">
-    <div class="creditList">
-        <div class="page-container creditlistform" :style="{ minHeight: SCREEN_HEIGHT }">
-          <van-sticky style="position: relative;">
-            <van-search  v-model="searchKeyWord" @input="onLoad()" placeholder="请输入查询信息" />
-            <van-button @click="returnFn" type="primary" style="    position: absolute;
-            top: 9px;
-            right: 13px;
-            height: 35px;
-            /* padding: 0 10px; */
-            height: 36px;">个人中心</van-button>
-          </van-sticky>
-          <van-pull-refresh v-model="refreshing" success-text="刷新成功" @refresh="onLoad(1)">
-            <van-list :immediate-check="false" v-if="list && list.length > 0" v-model="loading" finished-text="没有更多数据了" :finished="finished" @load="onLoad(2)">
-              <div class="list-item" :key="item.fileNo" v-for="item in list">
-                <!-- <div class="list-item-header flex-row-between">
-                </div> -->
-                <div class="list-item-content">
-                  <div class="item-content-text">员工姓名: {{ item.userName }}</div>
-                  <div class="item-content-text">手机号: {{ item.mobile }}</span></div>
-                  <div class="item-content-text">登录名: {{ item.accountName }}</div>
-                  <div class="item-content-text">状态: {{ item.available? '可用' : '不可用' }}</div>
-                  <div class="item-content-text">权限角色: {{juese(item)}}</div>
-                </div>
-                <div style="display: flex;justify-content: space-around;">
-                  <div :class="['list-item-btn', 'flex-row-center']" @click="quick({userId: item.id})">
-                  快捷登录
-                  </div>
-                  <!-- <div :class="['list-item-btn', 'flex-row-center']" @click="delect(item)">
-                    删除
-                  </div> -->
-                </div>          
-              </div>
-            </van-list>
-          </van-pull-refresh>
-          <div v-if="!list || list.length === 0" class="empty-container">
-            <van-empty description="暂无信息" />
-          </div>
-          <!-- <div class="plus-container flex-row-center" @click="routeToDetail">
-            <van-icon name="plus" color="white" size="55" />
-          </div> -->
-        </div>
-    </div>
+  <div>
+    <MainPageWrapper :showed="showed">
+    <SearchQroup :label-width="120" reset-text="重置" @search="refreshTableData" @reset="reset">
+      <el-form-item slot="form-item0" label="查询信息">
+        <el-input v-model.trim="tableParams.param" placeholder="请输入手机号/姓名" maxlength="100" clearable/>
+      </el-form-item>
+    </SearchQroup>
+    <TableView ref="tableView" :query-table-data="userPage" :table-params="tableParams" :needIndex="false">
+      <template slot="table-columns">
+        <el-table-column label="操作" width="160" fixed="right">
+          <template slot-scope="scope">
+            <div style="text-align: center;">
+              <el-button @click="quick({userId: scope.row.id})" type="text" >登录</el-button>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="userName" label="员工姓名" align="center" width="130" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="mobile" label="手机号" align="center" width="150"></el-table-column>
+				<el-table-column prop="accountName" label="登录名" align="center"></el-table-column>
+				<el-table-column prop="available" label="状态" align="center" width="80">
+					<template slot-scope="scope">
+						{{ ({ true: '可用', false: '不可用' })[scope.row.available] }}
+					</template>
+				</el-table-column>
+				<el-table-column prop="jobStatus" label="在职状态" align="center" width="80">
+					<template slot-scope="scope">
+						{{ ({ 0: '试用', 1: '正式', 2: '临时', 3: '试用延期', 4: '解聘', 5: '离职', 6: '退休', 7: '无效' })[scope.row.jobStatus] || '--' }}
+					</template>
+				</el-table-column>
+				<el-table-column label="任职信息" align="center">
+					<template slot-scope="scope">
+						<el-tag type="primary" size="mini" v-for="(item, index) in scope.row.deptDutyInfos" :key="index">
+							<template v-if="item.organName !== item.deptName">{{ item.organName }}-{{ item.deptName }}-{{ item.dutyName }}</template>
+							<template v-else>{{ item.deptName }}-{{ item.dutyName }}</template>
+						</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column label="权限角色" align="center">
+					<template slot-scope="scope">
+						{{ ( scope.row.roles || [] ).map(item => item.name).join(' / ') }}
+					</template>
+				</el-table-column>
+      </template>
+    </TableView>
+    </MainPageWrapper>
   </div>
 </template>
 
@@ -54,98 +56,40 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      list: [],
-      searchKeyWord: '',
-      loading: false,
-      finished: false,
-      refreshing: false,
-      pageSize: 0,
-      pageIndex: 1,
-      timeLmit: false
+      userPage,
+      showed: true,
+      tableParams: {
+        param: ''
+      },
     }
   },
   created () {
-    this.SCREEN_HEIGHT = this.$SCREEN_HEIGHT + 'px'
-    this.onLoad()
+    this.refreshTableData()
   },
   methods: {
-    juese (a) {
-      return a.roles.map(b => b.name).toString()
+    reset() {
+      this.tableParams = this.$options.data().tableParams;
+      this.refreshTableData();
     },
-    statusFn (val) {
-      if (val == 1) {
-        return '进行中'
-      }
-      if (val == 0) {
-        return '待处理'
-      }
-      return ''
+    refreshTableData () {
+      this.$nextTick(_ => { this.$refs.tableView.getInitialData() })
     },
     returnFn () {
       this.$router.push({ name: 'Center'})
     },
-    async onLoad (type) {
-      if (!type || type == 1) {
-        this.pageIndex = 1
-        this.pageSize = 10
-      } else {
-        this.pageIndex = this.pageIndex + 1
-        this.pageSize = 10
-      }
-      console.log(this.pageIndex)
-      console.log(this.pageSize)
-      this.loading = true
-      // this.$store.dispatch('loading/show')
-      const params = { pageIndex: this.pageIndex, pageSize: this.pageSize}
-      params.param = this.searchKeyWord
-      params.roleId = ''
-      params.status = ''
-      params.jobStatus = '' 
-      const response = await userPage(params)
-      // store.dispatch('loading/close')
-      if (response && response.code == '0') {
-        if (!type || type == 1) {
-          this.list = response.data.results
-        } else {
-          let a = this.list
-          let b = response.data.results        
-          this.list = a.concat(b)
-          
-        }   
-        console.log(this.list)
-        this.loading = false
-        this.refreshing = false
-        if (response.data.results.length > 0) {
-          this.finished = false
-        } else {
-          this.finished = true
-        }
-        
-      }
-    }, 
-    async delectFn (params) {
-      const response = await deleteTo(params)
-      if (response && response.code == '0') {
-        this.$toast('操作成功')
-        this.onLoad()
-      }
-    },
     quick (param) {
-      Dialog.confirm({
-        title: '温馨提示',
-        message: '是否快捷登录？',
-        confirmButtonText: '确认',
-        confirmButtonColor: '#0DB3A7',
+      this.$confirm('确定要退出登录吗?', '提示', {
+        confirmButtonText: '确定',
         cancelButtonText: '取消',
-        cancelButtonColor: '#999'
+        type: 'warning'
       }).then(() => {
-        this.quickLoginFn(param)
+         this.quickLoginFn(param)
       }).catch(() => {})
     },
     async quickLoginFn (param) {
-      this.$store.dispatch('loading/show')
+      this.$startLoad();
       const response = await quickLogin(param)
-      this.$store.dispatch('loading/hide')
+      this.$endLoad();
       cookies.set('ge_adminToken', response.data, { expires: 1 })
       this.returnFn()
     }

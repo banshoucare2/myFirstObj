@@ -9,7 +9,7 @@ import cookies from "js-cookie";
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'hash',
+  mode: 'history',
   routes,
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
@@ -26,19 +26,19 @@ router.beforeEach(async (to, from, next) => {
   if (to.path === '/') {
     if (cookies.get('ge_adminToken')) {
       await store.dispatch('user/login')
-      next('/dingding/center')
+      next('/index')
     } else {
-      next('/dingding/login')  // 未登录则跳转到登录页
+      next('/login')  // 未登录则跳转到登录页
     } 
   } else {
-    if (to.path === '/dingding/login') {
+    if (to.path === '/login') {
       next()  // 登录页直接next()
     } else {
       if (cookies.get('ge_adminToken')) {  // 如果已登录
         await store.dispatch('user/login')
         next()
       } else {
-        next('/dingding/login')  // 未登录则跳转到登录页
+        next('/login')  // 未登录则跳转到登录页
       }
     } 
   }  

@@ -242,7 +242,7 @@ export default {
     }
   },
   created () {
-    const url = location.href || location.hash;
+    const url = location.href;
     console.log("this.url:",url)
     if (url.split('?')[1]){
       this.taskId = url.split('?')[1].split('=')[1]

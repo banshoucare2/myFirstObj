@@ -10,16 +10,17 @@ import Center from '@/views/center/index.vue'
 export const routes = [
   // 个人中心
   {
-    path: '/dingding/center',
-    name: 'center',
+    path: '/index',
+    name: 'index',
     component: Center,
-    meta: { title: '个人中心' }
-  },
-  {
-    path: '/dingding/personManage',
-    name: 'personManage',
-    component: personManage,
-    meta: { title: '人员管理' }
+    meta: { title: '主页' },
+    children: [
+      {
+        path: 'personManage',
+        name: 'personManage',
+        component: personManage,
+      },
+    ]
   },
   {
     path: '/dingding/index',
@@ -34,7 +35,7 @@ export const routes = [
     meta: { title: '审核' }
   },
   {
-    path: '/dingding/login',
+    path: '/login',
     name: 'login',
     component: login,
     meta: { title: '登录' }
